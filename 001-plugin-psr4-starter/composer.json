@@ -1,0 +1,11 @@
+{
+    "name": "wordpress-architecture-lab/plugin-psr4-starter",
+    "description": "Plugin Wordpress reduzido, sando PSR-4 e autoload",
+    "type": "wordpress-plugin",
+    "autoload": {
+        "psr-4": {
+            "ArquitectureLab\\PluginInicial\\": "src/"
+        }
+    },
+    "require": {}
+}
