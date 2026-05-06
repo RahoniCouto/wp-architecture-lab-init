@@ -8,13 +8,15 @@ use ArquitectureLab\PluginInicial\Admin\SettingsPage;
 use ArquitectureLab\PluginInicial\Hooks\AdminNoticeHook;
 use ArquitectureLab\PluginInicial\Infrastructure\OptionRepository;
 use ArquitectureLab\PluginInicial\Services\MessageService;
+use ArquitectureLab\PluginInicial\Services\NoticeRenderer;
 
 final class Plugin{
     public static function init(): void {
-        $optionRepository = new OptionRepository();
-        $messageService = new MessageService( $optionRepository );
+        $repository = new OptionRepository();
+        $messageService = new MessageService( $repository );
+        $renderer = new NoticeRenderer();
 
-        (new AdminNoticeHook($messageService))->register();
-        (new SettingsPage($optionRepository))->register();
+        (new AdminNoticeHook($messageService, $renderer))->register();
+        (new SettingsPage($repository))->register();
     }
 }

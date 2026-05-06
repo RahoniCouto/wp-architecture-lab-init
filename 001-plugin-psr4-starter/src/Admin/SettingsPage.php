@@ -37,6 +37,8 @@ final class SettingsPage {
         }
 
         $message = $this->optionRepository->getMessage();
+        $type = $this->optionRepository->getType();
+        $dashboardOnly = $this->optionRepository->isDashOnly();
 
         ?>
             <div class="wrap">
@@ -78,6 +80,38 @@ final class SettingsPage {
                                     </p>
                                 </td>
                             </tr>
+                            <tr>
+                                <th scope="row">
+                                    <label for="architecture_lab_notice_type">
+                                        <?php echo esc_html__('Tipo de aviso:', 'architecture-lab'); ?>
+                                    </label>
+                                </th>
+                                <td>
+                                    <select id="architecture_lab_notice_type" name="type">
+                                        <option value="success" <?php selected($type, 'success'); ?>>Sucesso</option>
+                                        <option value="error" <?php selected($type, 'error'); ?>>Erro</option>
+                                        <option value="warning" <?php selected($type, 'warning'); ?>>Aviso</option>
+                                        <option value="info" <?php selected($type, 'info'); ?>>Info</option>
+                                    </select>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th scope="row">
+                                    <?php echo esc_html__('Visibilidade', 'architecture-lab'); ?>
+                                </th>
+                                <td>
+                                    <label for="architecture_lab_dashboard_only">
+                                        <input
+                                            type="checkbox"
+                                            id="architecture_lab_dashboard_only"
+                                            name="dash_only"
+                                            value="1"
+                                            <?php checked($dashboardOnly); ?>
+                                        >
+                                        <?php echo esc_html__('Mostrar apenas no Dashboard', 'architecture-lab'); ?>
+                                    </label>
+                                </td>
+                            </tr>
                         </tbody>
                     </table>
 
@@ -94,13 +128,24 @@ final class SettingsPage {
 
         check_admin_referer(self::NONCE_ACTION, self::NONCE_NAME);
 
-        $message = '';
+        $data = [
+            'message' => '',
+            'type' => 'success',
+            'dash_only' => false,
+        ];
 
-        if( isset( $_POST['architecture_lab_message'] ) && is_string( $_POST['architecture_lab_message'] )){
-            $message = wp_unslash( $_POST['architecture_lab_message'] );
+        if (isset($_POST['architecture_lab_message']) && is_string($_POST['architecture_lab_message'])) {
+            $data['message'] = sanitize_text_field(wp_unslash($_POST['architecture_lab_message']));
         }
 
-        $this->optionRepository->updateMessage($message);
+        if (isset($_POST['type']) && is_string($_POST['type'])) {
+            $type = sanitize_text_field(wp_unslash($_POST['type']));
+            $data['type'] = in_array($type, ['success', 'error', 'warning', 'info'], true) ? $type : 'success';
+        }
+
+        $data['dash_only'] = isset($_POST['dash_only']);
+
+        $this->optionRepository->save($data);
 
         wp_safe_redirect(
             add_query_arg(
