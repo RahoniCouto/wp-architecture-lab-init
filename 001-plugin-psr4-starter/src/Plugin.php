@@ -1,9 +1,10 @@
 <?php
 
-declare( strict_types=1);
+declare(strict_types=1);
 
 namespace ArquitectureLab\PluginInicial;
 
+use ArquitectureLab\PluginInicial\Admin\SettingsPage;
 use ArquitectureLab\PluginInicial\Hooks\AdminNoticeHook;
 use ArquitectureLab\PluginInicial\Infrastructure\OptionRepository;
 use ArquitectureLab\PluginInicial\Services\MessageService;
@@ -14,5 +15,6 @@ final class Plugin{
         $messageService = new MessageService( $optionRepository );
 
         (new AdminNoticeHook($messageService))->register();
+        (new SettingsPage($optionRepository))->register();
     }
 }

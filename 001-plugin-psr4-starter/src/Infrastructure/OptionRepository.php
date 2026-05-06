@@ -2,6 +2,8 @@
 
 declare( strict_types=1);
 
+namespace ArquitectureLab\PluginInicial\Infrastructure;
+
 final class OptionRepository {
     private const OPTION_MESSAGE = 'architecture_lab_psr4_inicial_message';
 

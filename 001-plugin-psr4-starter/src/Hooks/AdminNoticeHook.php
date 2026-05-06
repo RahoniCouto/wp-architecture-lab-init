@@ -4,7 +4,8 @@ declare( strict_types=1);
 
 namespace ArquitectureLab\PluginInicial\Hooks;
 
-use ArchitectureLab\PluginInicial\Services\MessageService;
+use ArquitectureLab\PluginInicial\Services\MessageService;
+
 
 final class adminNoticeHook {
     public function __construct(

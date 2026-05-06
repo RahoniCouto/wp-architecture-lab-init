@@ -14,7 +14,7 @@ final class MessageService {
     ){}
 
     public function getAdminMessage(): string {
-        $message = $this->OptionRepository->getMessage();
+        $message = $this->optionRepository->getMessage();
 
         if( $message === '' ){
             return self::DEFAULT_MESSAGE;
