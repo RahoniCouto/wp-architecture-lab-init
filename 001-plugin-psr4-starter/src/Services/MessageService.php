@@ -4,13 +4,13 @@ declare( strict_types=1);
 
 namespace ArquitectureLab\PluginInicial\Services;
 
-use ArquitectureLab\PluginInicial\Infrastructure\OptionRepository;
+use ArquitectureLab\PluginInicial\Contracts\OptionRepositoryInterface;
 
 final class MessageService {
     private const DEFAULT_MESSAGE = 'PSR-4 Inicial plugin está rodando.';
 
     public function __construct(
-        private readonly OptionRepository $repository
+        private readonly OptionRepositoryInterface $repository
     ){}
 
     public function getMessage(): string {
