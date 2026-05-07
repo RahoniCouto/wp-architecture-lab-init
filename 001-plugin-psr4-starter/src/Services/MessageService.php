@@ -2,9 +2,9 @@
 
 declare( strict_types=1);
 
-namespace ArquitectureLab\PluginInicial\Services;
+namespace ArchitectureLab\PluginInicial\Services;
 
-use ArquitectureLab\PluginInicial\Contracts\OptionRepositoryInterface;
+use ArchitectureLab\PluginInicial\Contracts\OptionRepositoryInterface;
 
 final class MessageService {
     private const DEFAULT_MESSAGE = 'PSR-4 Inicial plugin está rodando.';

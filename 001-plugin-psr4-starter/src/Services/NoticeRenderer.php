@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace ArquitectureLab\PluginInicial\Services;
+namespace ArchitectureLab\PluginInicial\Services;
 
 final class NoticeRenderer {
     public function render(string $message, string $type): void {

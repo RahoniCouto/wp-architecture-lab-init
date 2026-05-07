@@ -2,13 +2,12 @@
 
 declare( strict_types=1);
 
-namespace ArquitectureLab\PluginInicial\Hooks;
+namespace ArchitectureLab\PluginInicial\Hooks;
 
-use ArquitectureLab\PluginInicial\Services\MessageService;
-use ArquitectureLab\PluginInicial\Services\NoticeRenderer;
+use ArchitectureLab\PluginInicial\Services\MessageService;
+use ArchitectureLab\PluginInicial\Services\NoticeRenderer;
 
-
-final class adminNoticeHook {
+final class AdminNoticeHook {
     public function __construct(
         private readonly MessageService $messageService,
         private readonly NoticeRenderer $renderer

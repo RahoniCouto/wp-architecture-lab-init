@@ -2,9 +2,9 @@
 
 declare( strict_types=1);
 
-namespace ArquitectureLab\PluginInicial\Infrastructure;
+namespace ArchitectureLab\PluginInicial\Infrastructure;
 
-use ArquitectureLab\PluginInicial\Contracts\OptionRepositoryInterface;
+use ArchitectureLab\PluginInicial\Contracts\OptionRepositoryInterface;
 
 final class OptionRepository implements OptionRepositoryInterface {
     private const OPTION_KEY = 'architecture_lab_psr4_inicial_options';

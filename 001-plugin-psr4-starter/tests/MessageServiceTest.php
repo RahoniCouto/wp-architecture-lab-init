@@ -1,8 +1,8 @@
 <?php
 declare(strict_types=1);
 
-use ArquitectureLab\PluginInicial\Contracts\OptionRepositoryInterface;
-use ArquitectureLab\PluginInicial\Services\MessageService;
+use ArchitectureLab\PluginInicial\Contracts\OptionRepositoryInterface;
+use ArchitectureLab\PluginInicial\Services\MessageService;
 use PHPUnit\Framework\TestCase;
 
 final class MessageServiceTest extends TestCase {

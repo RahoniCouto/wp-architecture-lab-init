@@ -26,4 +26,4 @@ if ( !file_exists($autoload) ){
 
 require_once $autoload;
 
-ArquitectureLab\PluginInicial\Plugin::init();
+ArchitectureLab\PluginInicial\Plugin::init();

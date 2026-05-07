@@ -1,14 +1,14 @@
 <?php
 declare( strict_types=1);
 
-namespace ArquitectureLab\PluginInicial\Admin;
+namespace ArchitectureLab\PluginInicial\Admin;
 
-use ArquitectureLab\PluginInicial\Infrastructure\OptionRepository;
+use ArchitectureLab\PluginInicial\Infrastructure\OptionRepository;
 
 final class SettingsPage {
-    private const PAGE_SLUG = 'arquitecture-lab-psr-4-inicial';
-    private const NONCE_ACTION = 'arquitecturelab_psr4_inicial_save_nonce';
-    private const NONCE_NAME = 'arquitecturelab_psr4_inicial_nonce';
+    private const PAGE_SLUG = 'architecture-lab-psr-4-inicial';
+    private const NONCE_ACTION = 'architecturelab_psr4_inicial_save_nonce';
+    private const NONCE_NAME = 'architecturelab_psr4_inicial_nonce';
 
     public function __construct(
         private readonly OptionRepository $optionRepository
@@ -23,8 +23,8 @@ final class SettingsPage {
 
     public function addPage():void{
         add_management_page(
-            __('Arquitecture Lab', 'arquitecture-lab'),
-            __('Arquitecture Lab', 'arquitecture-lab'),
+            __('Architecture Lab', 'architecture-lab'),
+            __('Architecture Lab', 'architecture-lab'),
             'manage_options',
             self::PAGE_SLUG,
             [$this,  'render']
@@ -33,7 +33,7 @@ final class SettingsPage {
 
     public function render():void{
         if( !current_user_can( 'manage_options' ) ){
-            wp_die( esc_html__( 'Sem permissão de acesso', 'arquitecture-lab' ));
+            wp_die( esc_html__( 'Sem permissão de acesso', 'architecture-lab' ));
         }
 
         $message = $this->optionRepository->getMessage();
@@ -123,7 +123,7 @@ final class SettingsPage {
 
     public function handleSave():void{
         if( !current_user_can( 'manage_options' ) ){
-            wp_die( esc_html__( 'Você não tem permissão para salvar', 'arquitecture-lab' ));
+            wp_die( esc_html__( 'Você não tem permissão para salvar', 'architecture-lab' ));
         }
 
         check_admin_referer(self::NONCE_ACTION, self::NONCE_NAME);

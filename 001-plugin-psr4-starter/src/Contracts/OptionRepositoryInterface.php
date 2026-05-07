@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace ArquitectureLab\PluginInicial\Contracts;
+namespace ArchitectureLab\PluginInicial\Contracts;
 
 interface OptionRepositoryInterface {
     public function getMessage(): string;
