@@ -35,7 +35,7 @@ final class SnapshotRepository implements SnapshotRepositoryInterface {
         delete_option($this->buildOptionName($key));
     }
 
-    public function buildOptionName(string $key): string{
+    private function buildOptionName(string $key): string{
         return self::OPTION_PREFIX . sanitize_key($key);
     }
 }

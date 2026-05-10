@@ -20,7 +20,7 @@ final class LatestPostsGenerator {
                 'id' => (int) $post->ID,
                 'title' => get_the_title($post),
                 'permalink' => get_permalink($post),
-                'data' => get_the_date('d/m/Y', $post),
+                'date' => get_the_date('d/m/Y', $post),
             ];
         }
 
