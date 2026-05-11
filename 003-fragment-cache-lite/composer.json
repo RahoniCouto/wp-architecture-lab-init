@@ -1,0 +1,14 @@
+{
+    "name": "architecture-lab/fragment-cache-lite",
+    "description": "Plugin cria fragment cache usando PSR-4 e disponibilização do HTML cacheado na renderização",
+    "type": "wordpress-plugin",
+    "autoload": {
+        "psr-4": {
+            "ArchitectureLab\\FragmentCacheLite\\": "src/"
+        }
+    },
+    "require": {},
+    "require-dev": {
+        "phpunit/phpunit": "^9"
+    }
+}
