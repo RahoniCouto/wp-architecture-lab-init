@@ -4,12 +4,14 @@
     namespace ArchitectureLab\FragmentCacheLite\Services;
 
     use ArchitectureLab\FragmentCacheLite\Contracts\FragmentCacheInterface;
+    use ArchitectureLab\FragmentCacheLite\Contracts\PostsProviderInterface;
 
     final class CachedLatestPostsRenderer {
-        public const CACHE_KEY = 'latest-post-html';
+        public const CACHE_KEY = 'latest-posts-html';
 
         public function __construct(
-            private readonly FragmentCacheInterface $cache
+            private readonly FragmentCacheInterface $cache,
+            private readonly PostsProviderInterface $postsProvider
         ){}
 
         public function render(int $limit = 5): string {
@@ -19,42 +21,32 @@
                 return $cached;
             }
 
-            $html = $this->renderLatestPosts($limit);
+            $posts = $this->postsProvider->getLatestPosts($limit);
 
-            $this->cache->set(self::CACHE_KEY, $html, 3600);
-
-            return $html;
-        }
-
-        private function renderLatestPosts(int $limit): string {
-            $query = new \WP_Query([
-                'post_type' => 'post',
-                'post_status' => 'publish',
-                'posts_per_page' => $limit,
-                'no_found_rows' => true,
-                'ignore_sticky_posts' => true,
-            ]);
-
-            if(!$query->have_posts()){
-                return '<p>Posts não encontrados.</p>';
+            if($posts === []){
+                return '<p>Posts não encontrados</p>';
             }
 
             $html = '<ul class="fragment-cache-latest-posts">';
 
-            while($query->have_posts()){
-                $query->the_post();
-                
+            foreach($posts as $post){
+                $title = isset($post['title']) ? (string) $post['title'] : '';
+                $permalink = isset($post['permalink']) ? (string) $post['permalink'] : '';
+
+                if($title === '' || $permalink === ''){
+                    continue;
+                }
+
                 $html .= '<li>';
-                $html .= '<a href="' . esc_url(get_permalink()) . '">';
-                $html .= esc_html(get_the_title());
+                $html .= '<a href="' . esc_url($permalink) . '">';
+                $html .= esc_html($title);
                 $html .= '</a>';
                 $html .= '</li>';
             }
 
-            wp_reset_postdata();
-
-            $html .= '</ul>';
-
             return $html;
+
+            $this->cache->set(self::CACHE_KEY, $html, 3600);
+
         }
     }

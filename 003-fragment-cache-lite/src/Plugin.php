@@ -8,11 +8,14 @@ use ArchitectureLab\FragmentCacheLite\Infrastructure\FragmentCache;
 use ArchitectureLab\FragmentCacheLite\Services\CachedLatestPostsRenderer;
 use ArchitectureLab\FragmentCacheLite\Hooks\SavePostHook;
 use ArchitectureLab\FragmentCacheLite\Cli\PurgeCacheCommand;
+use ArchitectureLab\FragmentCacheLite\Infrastructure\WpPostsProvider;
 
 final class Plugin {
     public static function init(): void {
        $cache = new FragmentCache();
-       $renderer = new CachedLatestPostsRenderer($cache);
+       $postsProvider = new WpPostsProvider();
+
+       $renderer = new CachedLatestPostsRenderer($cache, $postsProvider );
 
        (new CachedShortcode($renderer))->register();
        (new SavePostHook($cache))->register();

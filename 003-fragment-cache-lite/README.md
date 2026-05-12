@@ -1,6 +1,6 @@
 # 🧪 003 — Fragment Cache Lite
 
-A ideia aqui é mostrar como arqmazenar trechos pessados e repetitivos de HTML, evitando que o wordpress fique reconstruindo milhares de vezes o mesmo conteúdo para atenter as requisições.
+A ideia aqui é mostrar como armazenar trechos pesados e repetitivos de HTML, evitando que o wordpress fique reconstruindo milhares de vezes o mesmo conteúdo para atender as requisições.
 
 ---
 
@@ -11,7 +11,7 @@ Criar um sistema simples de entender fragment cache usando:
 * PSR-4
 * Dependency Injection (DI)
 * Interface para abstração
-* Uso de transient API
+* Uso de transients API
 * Shortcode para consumo do fragment.
 * Invalidação
 * Comando WP_CLI para clear.
@@ -25,13 +25,15 @@ src/
 ├── Cli/
 │   └── PurgeCacheCommand.php
 ├── Contracts/
-│   └── FragmentCacheInterface.php
+│   ├── FragmentCacheInterface.php
+│   └── PostsProviderInterface.php
 ├── Frontend/
 │   └── CachedShortcode.php
 ├── Hooks/
 │   └── SavePostHook.php
 ├── Infrastructure/
-│   └── FragmentCache.php
+│   ├── FragmentCache.php
+│   └── WpPostsProvider.php
 ├── Services/
 │   └── CachedLatestPostsRenderer.php
 └── Plugin.php
@@ -62,7 +64,7 @@ salva no cache
 ## ⚙️ Funcionalidades implementadas
 
 * Shortcode que lista os últimos posts com o HTML cacheado com fragment.
-* Cache de fragmento usando Transient API.
+* Cache de fragmento usando Transients API.
 * TTL para expiração.
 * Invalidação ao salvar post.
 * Comando CLI para limpar manualmente.
@@ -93,7 +95,7 @@ wp fragment-cache purge
 
 Contrato que define como deve funcionar o sistema de cache.
 
-Métoddos:
+Métodos:
 
 ```php
 set()
@@ -105,7 +107,7 @@ delete()
 
 ### FragmentCache
 
-Implementado usando o Transient API do WordPress.
+Implementado usando o Transients API do WordPress.
 
 Foi desenvolvido de forma simples mas pode e deve evoluir para:
 
@@ -158,7 +160,7 @@ Cria o comando CLI para limpar o cache manualmente.
 * Armazena os dados.
 * Normalmente usa array.
 * Reduz as consultas e processamento de dados.
-* É consumido por varios renderizadores.
+* É consumido por vários renderizadores.
 
 ---
 
@@ -173,4 +175,37 @@ Cria o comando CLI para limpar o cache manualmente.
 
 ## 📌 Observações
 
-Foi usado Transient API por simplicidade, em projetos maiores e de alto tráfego precisamos ter um backend robusto com Redis ou Object Cache persistentes. Ainda assim esse formato permite fazer a mudança na implementação sem alterar o renderer e shortcode devido a interface.
+Foi usado Transients API por simplicidade, em projetos maiores e de alto tráfego precisamos ter um backend robusto com Redis ou Object Cache persistentes. Ainda assim esse formato permite fazer a mudança na implementação sem alterar o renderer e shortcode devido a interface.
+
+---
+
+## 🧬 Testes
+
+Adicionado teste unitario basico usado PHPUnit. Ideia não é validar WordPress mas sim a arquitetura e comportamento das classes.
+
+Para isso foi criado um provider para acesso ao "WP_Query", isso permite criar fakes/stubs para testes sem depender do runtime do WordPress.
+
+### Rodar os testes
+
+```bash
+./vendor/bin/phpunit
+```
+
+Ou com Docker:
+
+```bash
+docker compose exec wordpress sh -lc 'cd /var/www/html/wp-content/plugins/003-fragment-cache-lite && ./vendor/bin/phpunit'
+```
+
+### O que é validado
+
+* Ao chamar o cache retorna o HTML diretamente.
+* Garante que o provider não é chamado se existir cache.
+* Valida que o renderer está isolado do WordPress.
+
+### Estrutura de tests
+
+```
+tests/
+└── CachedLatestPostsRendererTest.php
+```
