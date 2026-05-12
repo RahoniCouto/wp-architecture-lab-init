@@ -42,6 +42,7 @@ frontend consome
 
 ## 🧱 Estrutura do projeto
 
+```
 src/
 ├── Cli/
 │   └── RegenerateCommand.php
@@ -58,11 +59,13 @@ src/
 ├── Services/
 │   └── SnapshotRegenerator.php
 └── Plugin.php
+```
 
 ---
 
 ## 🔄 Fluxo geral
 
+```
 save_post 
     🠗
 SavePostHook
@@ -74,15 +77,17 @@ LatestPostsGenerator
 SnapshotRepository
     🠗
 update_option()
-
+```
 
 No frontend:
 
+```
 Shortcode
     ↓
 SnapshotRepository
     ↓
 renderização rápida
+```
 
 ---
 
