@@ -3,7 +3,9 @@ declare(strict_types=1);
 
 namespace ArchitectureLab\SnapshotGeneratorDemo\Generator;
 
-final class LatestPostsGenerator {
+use ArchitectureLab\SnapshotGeneratorDemo\Contracts\LatestPostsGeneratorInterface;
+
+final class LatestPostsGenerator implements LatestPostsGeneratorInterface {
     public function generate(int $limit = 5): array {
         $query = new \WP_Query([
             'post_type' => 'post',
