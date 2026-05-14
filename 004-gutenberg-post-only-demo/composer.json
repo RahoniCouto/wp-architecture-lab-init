@@ -1,0 +1,14 @@
+{
+    "name": "architecture-lab/gutenberg-post-only-demo",
+    "description": "Plugin basico para controle entre Gutenberg e editor clássico",
+    "type": "wordpress-plugin",
+    "autoload": {
+        "psr-4": {
+            "ArchitectureLab\\GutenbergPostOnlyDemo\\": "src/"
+        }
+    },
+    "require": {},
+    "require-dev": {
+        "phpunit/phpunit": "^9"
+    }
+}
