@@ -1,0 +1,13 @@
+{
+    "name": "wordpress-architecture-lab/dependency-container-demo",
+    "description": "Plugin Wordpress reduzido, usando PSR-4 e autoload",
+    "type": "wordpress-plugin",
+    "autoload": {
+        "psr-4": {
+            "ArchitectureLab\\DependencyContainerDemo\\": "src/"
+        }
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^9"
+    }
+}
