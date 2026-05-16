@@ -22,45 +22,11 @@ final class Plugin{
             fn () => new OptionRepository()
         );
 
-        $container->set(
-            MessageService::class,
-            fn (Container $container) => new MessageService(
-                $container->get(OptionRepositoryInterface::class)
-            )
-        );
-
-        $container->set(
-            NoticeRenderer::class,
-            fn () => new NoticeRenderer()
-        );
-
-        $container->set(
-            AdminNoticeHook::class,
-            fn (Container $container) => new AdminNoticeHook(
-                $container->get(NoticeRenderer::class),
-                $container->get(NoticeRenderer::class)
-            )
-        );
-
-        $container->set(
-            SettingsPage::class,
-            fn (Container $container) => new SettingsPage(
-                $container->get(OptionRepositoryInterface::class)
-            )
-        );
-
-        $container->set(
-            StatusCommand::class,
-            fn (Container $container) => new StatusCommand(
-                $container->get(OptionRepositoryInterface::class)
-            )
-        );
-
-        $container->get(AdminNoticeHook::class)->register();
-        $container->get(SettingsPage::class)->register();
+        $container->resolve(AdminNoticeHook::class)->register();
+        $container->resolve(SettingsPage::class)->register();
 
         if(defined('WP_CLI') && WP_CLI){
-            \WP_CLI::add_command('architecture-lab status', $container->get(StatusCommand::class));
+            \WP_CLI::add_command('architecture-lab status', $container->resolve(StatusCommand::class));
         }
     }
 }

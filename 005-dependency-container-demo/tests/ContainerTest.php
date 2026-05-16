@@ -2,11 +2,21 @@
 declare(strict_types=1);
 
 use ArchitectureLab\DependencyContainerDemo\Container\Container;
-use RuntimeException;
 use PHPUnit\Framework\TestCase;
 
+interface DummyRepositoryInterface{}
+
+final class DummyRepository implements DummyRepositoryInterface{}
+
+final class DummyService{
+    public function __construct(
+        public readonly DummyRepositoryInterface $repository
+    ){}
+}
+
 final class ContainerTest extends TestCase {
-    private function test_lazyloaded(): void {
+
+    public function test_lazyloaded(): void {
         $container = new Container();
 
         $created = false;
@@ -39,5 +49,18 @@ final class ContainerTest extends TestCase {
         $this->expectExceptionMessage('Service "missing" não está registrado.');
 
         $container->get('missing');
+    }
+
+    public function test_auto_wire(): void {
+        $container = new Container();
+
+        $container->set(
+            DummyRepositoryInterface::class,
+            fn (): DummyRepositoryInterface => new DummyRepository()
+        );
+
+        $service = $container->resolve(DummyService::class);
+
+        $this->assertInstanceOf(DummyService::class, $service);
     }
 }
