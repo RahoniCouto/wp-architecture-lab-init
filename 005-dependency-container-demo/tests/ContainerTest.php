@@ -63,4 +63,24 @@ final class ContainerTest extends TestCase {
 
         $this->assertInstanceOf(DummyService::class, $service);
     }
+
+    public function test_resolve_alias(): void {
+        $container = new Container();
+
+        $instance = new stdClass();
+
+        $container->set(
+            'service',
+            fn (): object => $instance
+        );
+
+        $container->alias(
+            'alias-service',
+            'service'
+        );
+
+        $resolved = $container->get('alias-service');
+
+        $this->assertSame($instance, $resolved);
+    }
 }

@@ -13,5 +13,7 @@ final class AppServiceProvider {
             OptionRepositoryInterface::class,
             fn (): OptionRepositoryInterface => new OptionRepository()
         );
+
+        $container->alias('repository', OptionRepositoryInterface::class);
     }
 }

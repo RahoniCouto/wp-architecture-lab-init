@@ -19,11 +19,20 @@ final class Container {
      */
     private array $instances = [];
 
+    /**
+     * @var array<string, string>
+     */
+    private array $aliases = [];
+
     public function set(string $id, callable $factory): void {
         $this->factories[$id] = $factory;
     }
 
     public function get(string $id): mixed {
+        if(isset($this->aliases[$id])){
+            $id = $this->aliases[$id];
+        }
+
         if(isset($this->instances[$id])) {
             return $this->instances[$id];
         }
@@ -40,6 +49,10 @@ final class Container {
     }
 
     public function resolve(string $id): object {
+        if(isset($this->aliases[$id])){
+            $id = $this->aliases[$id];
+        }
+        
         if(isset($this->instances[$id])) {
             return $this->instances[$id];
         }
@@ -98,5 +111,9 @@ final class Container {
         $this->instances[$id] = $instance;
 
         return $instance;
+    }
+
+    public function alias(string $alias, string $target): void {
+        $this->aliases[$alias] = $target;
     }
 }
