@@ -1,7 +1,7 @@
 <?php
 /**
- * Plugin Name: Architecture Lab - Snapshot Generator Demo Basic
- * Description: Plugin simples de geração de Snapshot basicoo, usa apenas PSR-4, DI e dados prê computados, não recomendado para alto trafego.
+ * Plugin Name: Architecture Lab - Event Dispatcher Demo
+ * Description: Evolução direta da 002, aqui adicionamos Event Dispatcher para transformar a geração de snapshots em um fluxo orientado a eventos, desacoplando hooks, listeners e regras de regeneração dentro de uma arquitetura event-driven aplicada ao WordPress.
  * Version: 0.1.0
  * Author: Rahoni Couto
  */
