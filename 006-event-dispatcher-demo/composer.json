@@ -1,0 +1,14 @@
+{
+    "name": "architecture-lab/event-dispatcher-demo",
+    "description": "Evolução direta da 002, aqui adicionamos Event Dispatcher para transformar a geração de snapshots em um fluxo orientado a eventos, desacoplando hooks, listeners e regras de regeneração dentro de uma arquitetura event-driven aplicada ao WordPress.",
+    "type": "wordpress-plugin",
+    "autoload": {
+        "psr-4": {
+            "ArchitectureLab\\EventDispatcherDemo\\": "src/"
+        }
+    },
+    "require": {},
+    "require-dev": {
+        "phpunit/phpunit": "^9"
+    }
+}
