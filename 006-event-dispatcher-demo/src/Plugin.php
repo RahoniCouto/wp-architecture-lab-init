@@ -9,6 +9,10 @@ use ArchitectureLab\EventDispatcherDemo\Services\SnapshotRegenerator;
 use ArchitectureLab\EventDispatcherDemo\Hooks\SavePostHook;
 use ArchitectureLab\EventDispatcherDemo\Frontend\SnapshotShortcode;
 use ArchitectureLab\EventDispatcherDemo\Cli\RegenerateCommand;
+use ArchitectureLab\EventDispatcherDemo\Dispatcher\EventDispatcher;
+use ArchitectureLab\EventDispatcherDemo\Events\SnapshotRequestedEvent;
+use ArchitectureLab\EventDispatcherDemo\Listeners\GenerateLatestPostsSnapshotListener;
+use ArchitectureLab\EventDispatcherDemo\Listeners\LogSnapshotGenerationListener;
 
 final class Plugin {
     public static function init(): void {
@@ -17,7 +21,21 @@ final class Plugin {
 
         $regenerator = new SnapshotRegenerator($generator, $repository);
 
-        (new SavePostHook($regenerator))->register();
+        $dispatcher = new EventDispatcher();
+
+        $listener = new GenerateLatestPostsSnapshotListener($regenerator);
+
+        $dispatcher->listen(
+            SnapshotRequestedEvent::class,
+            [$listener, 'handle']
+        );
+
+        $dispatcher->listen(
+            SnapshotRequestedEvent::class,
+            [new LogSnapshotGenerationListener(), 'handle']
+        );
+
+        (new SavePostHook($dispatcher))->register();
         (new SnapshotShortcode($repository))->register();
 
         if (defined('WP_CLI') && WP_CLI) {

@@ -3,11 +3,12 @@ declare(strict_types=1);
 
 namespace ArchitectureLab\EventDispatcherDemo\Hooks;
 
-use ArchitectureLab\EventDispatcherDemo\Services\SnapshotRegenerator;
+use ArchitectureLab\EventDispatcherDemo\Dispatcher\EventDispatcher;
+use ArchitectureLab\EventDispatcherDemo\Events\SnapshotRequestEvent;
 
 final class SavePostHook {
     public function __construct(
-        private readonly SnapshotRegenerator $regenerator
+        private readonly EventDispatcher $dispatcher
     ){}
 
     public function register(): void {
@@ -23,6 +24,8 @@ final class SavePostHook {
             return;
         }
 
-        $this->regenerator->regenerateLatestPosts();
+        $this->dispatcher->dispatch(
+            new SnapshotRequestEvent($postId)
+        );
     }
 }
