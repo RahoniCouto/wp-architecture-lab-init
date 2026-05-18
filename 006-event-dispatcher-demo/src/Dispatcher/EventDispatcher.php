@@ -9,14 +9,14 @@ final class EventDispatcher {
      */
     private array $listeners = [];
 
-    public function listen(string $eventClass, calable $listener): void {
+    public function listen(string $eventClass, callable $listener): void {
         $this->listeners[$eventClass][] = $listener;
     }
 
     public function dispatch(object $event): void {
         $eventClass = $event::class;
 
-        foreach($this->listeners[$eventClass] ?? [] as $listeners){
+        foreach($this->listeners[$eventClass] ?? [] as $listener){
             $listener($event);
         }
     }
