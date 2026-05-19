@@ -30,9 +30,8 @@ final class Plugin {
             [$listener, 'handle']
         );
 
-        $dispatcher->listen(
-            SnapshotRequestedEvent::class,
-            [new LogSnapshotGenerationListener(), 'handle']
+        $dispatcher->subscribe(
+            new LogSnapshotGenerationListener()
         );
 
         (new SavePostHook($dispatcher))->register();

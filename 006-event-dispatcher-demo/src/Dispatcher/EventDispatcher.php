@@ -3,6 +3,8 @@ declare(strict_types=1);
 
 namespace ArchitectureLab\EventDispatcherDemo\Dispatcher;
 
+use ArchitectureLab\EventDispatcherDemo\Contracts\EventSubscriberInterface;
+
 final class EventDispatcher {
     /**
      * @var array<string, callable[]>
@@ -10,14 +12,30 @@ final class EventDispatcher {
     private array $listeners = [];
 
     public function listen(string $eventClass, callable $listener): void {
-        $this->listeners[$eventClass][] = $listener;
+        $this->listeners[$eventClass][$priority][] = $listener;
     }
 
     public function dispatch(object $event): void {
         $eventClass = $event::class;
 
-        foreach($this->listeners[$eventClass] ?? [] as $listener){
-            $listener($event);
+        $listeners = $this->listeners[$eventClass] ?? [];
+
+        krsort($listeners);
+
+        foreach($listeners as $priorityListeners){
+            foreach( $priorityListeners as $listener) {
+                $listener($event);
+            }
+        }
+    }
+
+    public function subscribe(EventSubscriberInterface $subscriber): void {
+        foreach ($subscriber::getSubscribedEvents() as $eventClass => $config) {
+            $this->listen(
+                $eventClass,
+                [$subscriber, $config['method']],
+                $config['priority'] ?? 0
+            );
         }
     }
 }
