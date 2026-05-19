@@ -16,7 +16,7 @@ Demonstrar o uso:
 * Fragment Cache.
 * Policy Chain.
 * Event Driven Architecture.
-* Conteiners.
+* Containers.
 * Testabilidade PHPUnit.
 
 ---
@@ -77,14 +77,10 @@ Controle arquitetural do editor Gutenberg usando policies desacopladas.
 
 ---
 
-## 🚧 Planejados
-
-Ideias já planejadas, será disponibilizado em breve.
-
 ### 🧪 005 — Dependency Container Demo
 
 Explorar containers de dependência e resolução automática de serviços. 
-Todos os outros Labs podem evoluir com o uso de conteiners.
+Todos os outros Labs podem evoluir com o uso de containers.
 
 * Service Container
 * Bindings
