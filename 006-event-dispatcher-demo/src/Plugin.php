@@ -13,6 +13,7 @@ use ArchitectureLab\EventDispatcherDemo\Dispatcher\EventDispatcher;
 use ArchitectureLab\EventDispatcherDemo\Events\SnapshotRequestedEvent;
 use ArchitectureLab\EventDispatcherDemo\Listeners\GenerateLatestPostsSnapshotListener;
 use ArchitectureLab\EventDispatcherDemo\Listeners\LogSnapshotGenerationListener;
+use ArchitectureLab\EventDispatcherDemo\Listeners\ValidationListener;
 
 final class Plugin {
     public static function init(): void {
@@ -32,6 +33,10 @@ final class Plugin {
 
         $dispatcher->subscribe(
             new LogSnapshotGenerationListener()
+        );
+
+        $dispatcher->subscribe(
+            new ValidationListener()
         );
 
         (new SavePostHook($dispatcher))->register();

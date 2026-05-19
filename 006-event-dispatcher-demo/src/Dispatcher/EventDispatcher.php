@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace ArchitectureLab\EventDispatcherDemo\Dispatcher;
 
 use ArchitectureLab\EventDispatcherDemo\Contracts\EventSubscriberInterface;
+use ArchitectureLab\EventDispatcherDemo\Contracts\StoppableEventInterface;
 
 final class EventDispatcher {
     /**
@@ -11,7 +12,7 @@ final class EventDispatcher {
      */
     private array $listeners = [];
 
-    public function listen(string $eventClass, callable $listener): void {
+    public function listen(string $eventClass, callable $listener, int $priority = 0): void {
         $this->listeners[$eventClass][$priority][] = $listener;
     }
 
@@ -24,6 +25,13 @@ final class EventDispatcher {
 
         foreach($listeners as $priorityListeners){
             foreach( $priorityListeners as $listener) {
+                if(
+                    $event instanceof StoppableEventInterface
+                    && $event->isPropagationStopped()
+                ){
+                    return;
+                }
+            
                 $listener($event);
             }
         }

@@ -2,6 +2,8 @@
 declare(strict_types=1);
 
 use ArchitectureLab\EventDispatcherDemo\Dispatcher\EventDispatcher;
+use ArchitectureLab\EventDispatcherDemo\Contracts\EventSubscriberInterface;
+use ArchitectureLab\EventDispatcherDemo\Events\SnapshotRequestedEvent;
 use PHPUnit\Framework\TestCase;
 
 final class EventDispatcherTest extends TestCase {
@@ -23,12 +25,12 @@ final class EventDispatcherTest extends TestCase {
             function () use (&$executionOrder): void {
                 $executionOrder[] = 'high';
             },
-            0
+            100
         );
 
         $dispatcher->dispatch(new DummyEvent());
 
-        $this->assetSame(
+        $this->assertSame(
             ['high', 'low'],
             $executionOrder
         );
@@ -39,9 +41,11 @@ final class EventDispatcherTest extends TestCase {
         $executed = false;
 
         $subscriber = new class($executed) implements EventSubscriberInterface {
-            public function __construct(
-                private bool &$executed 
-            ){}
+            private bool $executedRef;    
+
+            public function __construct(bool &$executed){
+                $this->executedRef = &$executed;
+            }
 
             public static function getSubscribedEvents(): array{
                 return [
@@ -52,13 +56,45 @@ final class EventDispatcherTest extends TestCase {
             }
 
             public function handle(): void {
-                $this->executed = true;
+                $this->executedRef = true;
             }
         };
 
         $dispatcher->subscribe($subscriber);
         $dispatcher->dispatch(new DummyEvent());
-        $this->assetTrue($executed);
+        $this->assertTrue($executed);
+    }
+
+    public function test_stop_propagation(): void {
+        $dispatcher = new EventDispatcher();
+        $executionOrder = [];
+
+        $dispatcher->listen(
+            SnapshotRequestedEvent::class,
+            function (SnapshotRequestedEvent $event) use (&$executionOrder): void {
+                $executionOrder[] = 'first';
+
+                $event->stopPropagation();
+            },
+            100
+        );
+
+        $dispatcher->listen(
+            SnapshotRequestedEvent::class,
+            function () use (&$executionOrder): void {
+                $executionOrder[] = 'second';
+            },
+            0
+        );
+
+        $dispatcher->dispatch(
+            new SnapshotRequestedEvent(1)
+        );
+
+        $this->assertSame(
+            ['first'],
+            $executionOrder
+        );
     }
 }
 
