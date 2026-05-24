@@ -2,6 +2,8 @@
 
 Projeto focado em arquitetura para WordPress, ideia aqui é explorar alguns padrões, desacoplamento, organização e testabilidade de código. Cada pasta representa um lab independente com em uma questão arquitetural específica.
 
+Este repositório é um laboratório de estudo. Ele não propõe que todos esses padrões devam ser aplicados em qualquer plugin, tema ou projeto WordPress em produção.
+
 ---
 
 ## Objetivos
@@ -15,9 +17,28 @@ Demonstrar o uso:
 * Arquitetura de Snapshots.
 * Fragment Cache.
 * Policy Chain.
-* Event Driven Architecture.
+* Event Dispatcher local.
 * Containers.
 * Testabilidade PHPUnit.
+
+---
+
+## ⚠️ Escopo e limites do projeto
+
+O objetivo desses labs não é transformar WordPress em Laravel, Symfony, Go, Elixir ou em uma plataforma distribuída.
+
+WordPress possui características próprias:
+
+* ciclo de execução síncrono por request;
+* hooks globais baseados em prioridade;
+* concorrência limitada pelo modelo PHP/servidor;
+* muitos plugins disputando os mesmos recursos;
+* estado compartilhado via banco, options, post meta, transients e cache;
+* baixa previsibilidade quando múltiplos plugins alteram o mesmo fluxo.
+
+Por isso, os padrões apresentados aqui devem ser entendidos como ferramentas de organização interna, não como solução automática de escala, concorrência, mensageria, processamento distribuído ou isolamento de recursos.
+
+Em ambientes críticos ou de grande escala, tarefas pesadas, concorrentes, recorrentes ou sensíveis a falhas devem ser avaliadas fora do runtime principal do WordPress, usando filas, workers, locks, TTLs, idempotência, observabilidade e, quando fizer sentido, serviços dedicados em tecnologias mais apropriadas para processamento assíncrono ou concorrente.
 
 ---
 
@@ -92,13 +113,17 @@ Todos os outros Labs podem evoluir com o uso de containers.
 
 ### 🧪 006 — Event Dispatcher Demo
 
-Usar arquitetura orientada a eventos dentro do WordPress.
+Explorar o uso limitado de um Event Dispatcher dentro do WordPress para desacoplar efeitos colaterais locais.
 
-* Event Dispatcher
-* Subscribers
-* Domain Events
-* Event-driven flows
-* Desacoplamento entre módulos
+* Event Dispatcher local.
+* Subscribers.
+* Domain Events simples.
+* Listener priorities
+* Stoppable events
+* Desacoplamento entre hooks e serviços
+* Limites de event-driven architecture dentro do WordPress
+
+Este lab não apresenta Event Dispatcher como solução para concorrência, filas, mensageria distribuída ou processamento em larga escala. O objetivo é apenas estudar como separar intenção e reação dentro de um plugin WordPress.
 
 ---
 
@@ -107,3 +132,5 @@ Usar arquitetura orientada a eventos dentro do WordPress.
 A intenção do projeto não é criar plugins prontos para produção, mas sim demonstrar arquitetura de software aplicada ao WordPress de forma incremental.
 
 Cada laboratório tenta resolver um problema específico enquanto introduz novas camadas arquiteturais, deixando claro o motivo da existência de cada abordagem e como a complexidade evolui ao longo do projeto.
+
+O ponto principal é entender quando uma abstração ajuda, quando ela atrapalha e quais limites o próprio WordPress impõe antes de uma solução precisar sair do ecossistema WordPress.
